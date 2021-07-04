@@ -140,6 +140,18 @@ TextureImporter:
   - first:
       213: -6495646839377359866
     second: UI_Def_45
+  - first:
+      213: 1079679808476040374
+    second: T_Loading_Character1
+  - first:
+      213: -7283653840305245180
+    second: T_Loading_Character2
+  - first:
+      213: 3787175853700842409
+    second: T_Loading_Character3
+  - first:
+      213: -6610996090943213247
+    second: T_Loading
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -315,7 +327,7 @@ TextureImporter:
         width: 251
         height: 250
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -336,7 +348,7 @@ TextureImporter:
         width: 253
         height: 255
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -344,6 +356,90 @@ TextureImporter:
       bones: []
       spriteID: c84cd9a0a32ec2070800000000000000
       internalID: 8083084170137289868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: T_Loading_Character1
+      rect:
+        serializedVersion: 2
+        x: 1010
+        y: 6
+        width: 426
+        height: 766
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6bc406fb01bcbfe00800000000000000
+      internalID: 1079679808476040374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: T_Loading_Character2
+      rect:
+        serializedVersion: 2
+        x: 1773
+        y: 56
+        width: 789
+        height: 656
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40432b53c634bea90800000000000000
+      internalID: -7283653840305245180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: T_Loading_Character3
+      rect:
+        serializedVersion: 2
+        x: 2790
+        y: 90
+        width: 689
+        height: 680
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a386c5af50ce8430800000000000000
+      internalID: 3787175853700842409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: T_Loading
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 100
+        width: 661
+        height: 197
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 14175d3f4160144a0800000000000000
+      internalID: -6610996090943213247
       vertices: []
       indices: 
       edges: []

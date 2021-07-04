@@ -90,6 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ca8dce106b048a4bb1f86d637239082, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _TouchSound: {fileID: 8300000, guid: ccae28c4835d6e248a42fd39322c3a18, type: 3}
 --- !u!1 &6255288746795087121
 GameObject:
   m_ObjectHideFlags: 0

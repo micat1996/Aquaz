@@ -12,7 +12,11 @@ public sealed class BubbleSpawnerComponent : MonoBehaviour
 		Miss,
 		Bad,
 		Good,
-		Perfect
+		Perfect,
+
+		Start,
+		GameOver,
+		Victory
 	}
 
 	[System.Serializable]
@@ -21,6 +25,8 @@ public sealed class BubbleSpawnerComponent : MonoBehaviour
 		public JudgmentType judgmentType;
 		public Color gizmoColor;
 		public float rangeTop, rangeBottom;
+		public float changeHp;
+		public int changeScore;
 	}
 
 	[System.Serializable]
@@ -47,6 +53,10 @@ public sealed class BubbleSpawnerComponent : MonoBehaviour
 
 	private Dictionary<BubbleType, Queue<BubbleInstance>> _SpawnedBubble = new Dictionary<BubbleType, Queue<BubbleInstance>>();
 
+	private AquazGameSceneInstance _AquazGameSceneInstance;
+
+	private JudgmentType _PrevJudgment;
+
 
 	private void Awake()
 	{
@@ -63,13 +73,36 @@ public sealed class BubbleSpawnerComponent : MonoBehaviour
 
 	private void Start()
 	{
+		_AquazGameSceneInstance = SceneManager.Instance.sceneInstance as AquazGameSceneInstance;
+
 		_Panel_Bubbles.bubbleButtons[BubbleType.Long].onBubbleButtonClicked += OnBubbleButtonClicked;
 		_Panel_Bubbles.bubbleButtons[BubbleType.Octo].onBubbleButtonClicked += OnBubbleButtonClicked;
 		_Panel_Bubbles.bubbleButtons[BubbleType.Star].onBubbleButtonClicked += OnBubbleButtonClicked;
 
+		_AquazGameSceneInstance.onGameFinished += () =>
+		{
+			foreach (var spawnedBubble in _SpawnedBubble)
+			{
+				while(spawnedBubble.Value.Count != 0)
+                {
+					HideBubble(spawnedBubble.Value.Dequeue());
+				}
+			};
+		};
+		StartCoroutine(StartGame());
+	}
+
+	private IEnumerator StartGame()
+    {
+		yield return new WaitUntil(() => _AquazGameSceneInstance.judgmentResultController != null);
+
+		_AquazGameSceneInstance.SetGameStatus(GameStatus.Play);
+
+		yield return new WaitForSeconds(1.0f);
 
 		StartRandomSpawn();
 	}
+
 
 	// Test
 	private void StartRandomSpawn()
@@ -78,16 +111,13 @@ public sealed class BubbleSpawnerComponent : MonoBehaviour
 		{
 
 			WaitForSeconds wait1Sec = new WaitForSeconds(1.0f);
-			while (true)
+			while (_AquazGameSceneInstance.gameStatus == GameStatus.Play)
 			{
-				//Debug.Log("Random Spawn");
-
 				SpawnBubbleInstance((BubbleType)Random.Range(0, 3));
 				yield return wait1Sec;
 			}
 		}
 		StartCoroutine(RandomSpawn());
-
 	}
 
 	private BubbleInstance SpawnBubbleInstance(BubbleType bubbleType)
@@ -107,14 +137,24 @@ public sealed class BubbleSpawnerComponent : MonoBehaviour
 
 	private void OnBubbleButtonClicked(BubbleType bubbleButtonType)
 	{
-		if (_SpawnedBubble[bubbleButtonType].Count == 0) return;
+		//if (_SpawnedBubble[bubbleButtonType].Count == 0) return;
 
 
 		DestroyBubble(bubbleButtonType);
 	}
 
+	private void HideBubble(BubbleInstance bubble)
+	{
+		bubble.canRecyclable = true;
+		bubble.rectTransform.anchoredPosition = Vector2.down * 500.0f;
+	}
+
 	public void DestroyBubble(BubbleType bubbleType, bool forceDestroy = false)
 	{
+
+
+		if (_SpawnedBubble[bubbleType].Count == 0) return;
+
 		BubbleInstance nearestBubble = _SpawnedBubble[bubbleType].Peek();
 
 		JudgmentType judgmentType = GetJudgmentType(nearestBubble);
@@ -123,12 +163,33 @@ public sealed class BubbleSpawnerComponent : MonoBehaviour
 		if (judgmentType == JudgmentType.None && !forceDestroy) return;
 
 		_SpawnedBubble[bubbleType].Dequeue();
-		nearestBubble.canRecyclable = true;
-		nearestBubble.rectTransform.anchoredPosition = Vector2.down * 500.0f;
+		HideBubble(nearestBubble);
+		//nearestBubble.canRecyclable = true;
+		//nearestBubble.rectTransform.anchoredPosition = Vector2.down * 500.0f;
+
+
+		// Activate Combo
+		_AquazGameSceneInstance.comboActivated = 
+			(judgmentType == JudgmentType.Perfect &&
+			_PrevJudgment == JudgmentType.Perfect);
+
+		if (_AquazGameSceneInstance.comboActivated)
+			_AquazGameSceneInstance.PlayAnimationCombo();
+		else _AquazGameSceneInstance.PlayAnimationPlay();
+
+		_PrevJudgment = judgmentType;
+
+		_AquazGameSceneInstance.judgmentResultController.ShowResult(judgmentType);
+
+		RhythmJudgmentRange judgmentInfo = _RhythmJudgmentRanges.Find(
+			(RhythmJudgmentRange rangeInfo) => rangeInfo.judgmentType == judgmentType);
+
+		_AquazGameSceneInstance.hp += judgmentInfo.changeHp;
+
+		_AquazGameSceneInstance.score += judgmentInfo.changeScore * 
+			((_AquazGameSceneInstance.comboActivated) ? 1 : 2);
 
 		Debug.Log(judgmentType.ToString());
-
-
 	}
 
 	public JudgmentType GetJudgmentType(BubbleInstance bubbleInstance)
@@ -197,4 +258,3 @@ public sealed class BubbleSpawnerComponent : MonoBehaviour
 
 
 }
-;

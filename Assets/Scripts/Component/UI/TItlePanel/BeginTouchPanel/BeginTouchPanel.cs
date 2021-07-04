@@ -5,10 +5,16 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public sealed class BeginTouchPanel : MonoBehaviour,
-	IPointerClickHandler
+    IPointerClickHandler
 {
-	public TitlePanel titlePanel { get; set; }
+    [SerializeField]
+    private AudioClip _TouchSound;
 
-	void IPointerClickHandler.OnPointerClick(PointerEventData eventData) =>
-		titlePanel.FloatingMainPanel();
+    public TitlePanel titlePanel { get; set; }
+
+    void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
+    {
+        titlePanel.FloatingMainPanel();
+        SoundManager.Instance.PlayEffectSound(_TouchSound);
+    }
 }
